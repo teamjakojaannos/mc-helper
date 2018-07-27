@@ -1,0 +1,23 @@
+package ${PACKAGE};
+
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+
+@Mod(
+        modid = ${CLASS_NAME}.MOD_ID,
+        name = ${CLASS_NAME}.NAME,
+        version = ${CLASS_NAME}.VERSION
+)
+public class ${CLASS_NAME} {
+    public static final String MOD_ID = "${MOD_ID}";
+    public static final String NAME = "${MOD_NAME}";
+    public static final String VERSION = "__VERSION__";
+
+    @Instance
+    public static ${CLASS_NAME} INSTANCE;
+
+    @SidedProxy(clientSide = "${PACKAGE}.client.ClientProxy", serverSide = "${PACKAGE}.CommonProxy")
+    public static CommonProxy proxy;
+}

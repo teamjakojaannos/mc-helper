@@ -1,0 +1,33 @@
+<idea-plugin>
+    <id>jakojaannos.mc-helper</id>
+    <name>Minecraft Mod Development Companion</name>
+    <vendor email="teamjakojaannos@gmail.com">Team Jakojäännös</vendor>
+
+    <description><![CDATA[
+    Inspired by MCreator, provides utilities for performing common tasks during mod development, but instead of
+    shipping as a separate software, bundles those features to the IDE for more streamlined workflow.
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+    <depends>com.intellij.modules.java</depends>
+    <depends>org.jetbrains.plugins.gradle</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileTemplateGroup implementation="jakojaannos.mchelper.templates.MinecraftForgeFileTemplateGroupDescriptorFactory"/>
+        <facetType implementation="jakojaannos.mchelper.facet.MinecraftForgeFacetType"/>
+
+        <moduleType id="MINECRAFTFORGE_MODULE" implementationClass="jakojaannos.mchelper.module.ForgeModuleType"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="org.jetbrains.plugins.gradle">
+        <frameworkSupport implementation="jakojaannos.mchelper.framework.GradleMinecraftForgeJavaFrameworkSupportProvider"/>
+    </extensions>
+
+    <actions>
+
+    </actions>
+</idea-plugin>
