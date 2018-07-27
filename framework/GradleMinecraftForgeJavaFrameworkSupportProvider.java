@@ -6,7 +6,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ModifiableModelsProvider;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.vfs.VirtualFile;
-import jakojaannos.mchelper.templates.MinecraftForgeFileTemplateGroupDescriptorFactory;
+import jakojaannos.mchelper.templates.ForgeTemplates;
 import jakojaannos.mchelper.util.ApplicationUtil;
 import jakojaannos.mchelper.util.TemplateUtil;
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +60,7 @@ public class GradleMinecraftForgeJavaFrameworkSupportProvider extends GradleJava
 
                 TemplateUtil.applyJ2eeTemplate(
                         module.getProject(),
-                        MinecraftForgeFileTemplateGroupDescriptorFactory.GRADLE_PROPERTIES_TEMPLATE,
+                        ForgeTemplates.GRADLE_PROPERTIES_TEMPLATE,
                         propertiesFile,
                         properties,
                         false);
@@ -86,7 +86,7 @@ public class GradleMinecraftForgeJavaFrameworkSupportProvider extends GradleJava
 
                 TemplateUtil.applyJ2eeTemplate(
                         module.getProject(),
-                        MinecraftForgeFileTemplateGroupDescriptorFactory.MAIN_CLASS_TEMPLATE,
+                        ForgeTemplates.MAIN_CLASS_TEMPLATE,
                         mainClassFile,
                         properties,
                         true);
@@ -102,7 +102,7 @@ public class GradleMinecraftForgeJavaFrameworkSupportProvider extends GradleJava
 
                 TemplateUtil.applyJ2eeTemplate(
                         module.getProject(),
-                        MinecraftForgeFileTemplateGroupDescriptorFactory.COMMON_PROXY_TEMPLATE,
+                        ForgeTemplates.COMMON_PROXY_TEMPLATE,
                         commonProxyFile,
                         properties,
                         true);
@@ -113,7 +113,7 @@ public class GradleMinecraftForgeJavaFrameworkSupportProvider extends GradleJava
 
                 TemplateUtil.applyJ2eeTemplate(
                         module.getProject(),
-                        MinecraftForgeFileTemplateGroupDescriptorFactory.CLIENT_PROXY_TEMPLATE,
+                        ForgeTemplates.CLIENT_PROXY_TEMPLATE,
                         clientProxyFile,
                         properties,
                         true);
