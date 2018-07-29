@@ -3,7 +3,7 @@ package jakojaannos.mchelper.forge;
 import java.util.Objects;
 
 public class ForgeVersionEntry {
-    public static final String DEFAULT_VERSION = "14.23.4.2739";
+    public static final String DEFAULT_VERSION = "14.23.4.2744";
 
     private final String version;
     private final McpMappingEntry defaultMappings;

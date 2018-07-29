@@ -24,6 +24,10 @@ import com.intellij.openapi.externalSystem.util.ExternalSystemUtil;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.module.*;
 import com.intellij.openapi.options.ConfigurationException;
+import com.intellij.openapi.progress.PerformInBackgroundOption;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.JavaSdkType;
 import com.intellij.openapi.projectRoots.SdkTypeId;
@@ -44,10 +48,12 @@ import jakojaannos.mchelper.forge.MinecraftVersionEntry;
 import jakojaannos.mchelper.module.wizard.ForgeWizardStep;
 import jakojaannos.mchelper.module.wizard.ModWizardStep;
 import jakojaannos.mchelper.templates.ForgeTemplates;
+import jakojaannos.mchelper.util.GradleHelper;
 import jakojaannos.mchelper.util.TemplateUtil;
 import lombok.*;
 import lombok.experimental.var;
 import org.gradle.util.GradleVersion;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.gradle.service.settings.GradleProjectSettingsControl;
 import org.jetbrains.plugins.gradle.settings.DistributionType;
 import org.jetbrains.plugins.gradle.settings.GradleProjectSettings;
@@ -230,14 +236,7 @@ public class ForgeModuleBuilder extends AbstractExternalModuleBuilder<GradleProj
             //noinspection unchecked
             settings.linkProject(getExternalProjectSettings());
 
-            Runnable task = () -> {
-                ImportSpec importSpec = new ImportSpecBuilder(project, GradleConstants.SYSTEM_ID)
-                        .use(ProgressExecutionMode.IN_BACKGROUND_ASYNC)
-                        //.createDirectoriesForEmptyContentRoots()
-                        .useDefaultCallback()
-                        .build();
-                ExternalSystemUtil.refreshProject(rootProjectPath, importSpec);
-            };
+            Runnable task = () -> setupForgeProject(project);
 
             ExternalSystemUtil.invokeLater(project, ModalityState.NON_MODAL, task);
         } else {
@@ -251,16 +250,35 @@ public class ForgeModuleBuilder extends AbstractExternalModuleBuilder<GradleProj
                     settings.linkProject(projectSettings);
                 }
 
+                setupForgeProject(project);
+            };
+
+            ExternalSystemUtil.invokeLater(project, ModalityState.NON_MODAL, task);
+        }
+    }
+
+    private void setupForgeProject(Project project) {
+        LOG.assertTrue(rootProjectPath != null);
+
+        PerformInBackgroundOption option = () -> false;
+        ProgressManager.getInstance().run(new Task.Backgroundable(project, "Setting up Forge...", false, option) {
+            @Override
+            public void run(@NotNull ProgressIndicator indicator) {
+                indicator.setIndeterminate(true);
+
                 ImportSpec importSpec = new ImportSpecBuilder(project, GradleConstants.SYSTEM_ID)
                         .use(ProgressExecutionMode.IN_BACKGROUND_ASYNC)
                         .createDirectoriesForEmptyContentRoots()
                         .useDefaultCallback()
                         .build();
                 ExternalSystemUtil.refreshProject(rootProjectPath, importSpec);
-            };
 
-            ExternalSystemUtil.invokeLater(project, ModalityState.NON_MODAL, task);
-        }
+                GradleHelper.runGradleTask(project, indicator, launcher ->
+                        launcher.forTasks("setupDecompWorkspace").setJvmArguments("-Xmx2G"));
+
+                ExternalSystemUtil.refreshProject(rootProjectPath, importSpec);
+            }
+        });
     }
 
     @Override

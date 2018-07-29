@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '0.3.4'
+    id 'org.jetbrains.intellij' version '0.3.5'
     id "io.franzbecker.gradle-lombok" version "1.14"
 }
 
@@ -19,7 +19,7 @@ dependencies {
 
 intellij {
     setPlugins("gradle")
-    version '2018.1.4'
+    version '2018.2'
 }
 patchPluginXml {
     changeNotes """

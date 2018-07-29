@@ -37,10 +37,10 @@ public class ForgeWizardStep extends ModuleWizardStep {
      */
     private void setupComboBoxContents() {
         // TODO: Poll mappings from internet
-        MinecraftVersionEntry mcVersion = new MinecraftVersionEntry("1.12.2");
-        McpMappingEntry mcpMappings = new McpMappingEntry("snapshot_20171003", "1.12");
+        MinecraftVersionEntry mcVersion = new MinecraftVersionEntry();
+        McpMappingEntry mcpMappings = new McpMappingEntry();
         mcVersion.addForgeVersions(
-                new ForgeVersionEntry("14.23.4.2739", mcpMappings, true, false)
+                new ForgeVersionEntry()
         );
 
         minecraftVersion.addItem(mcVersion);
