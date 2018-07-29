@@ -1,0 +1,9 @@
+mod_id=${MOD_ID}
+mod_group=${MOD_GROUP}
+mod_version=${MOD_VERSION}
+
+mod_build_number_env=BUILD_NUMBER
+
+mc_version=${MC_VERSION}
+forge_version=${FORGE_VERSION}
+mcp_mappings=${MCP_MAPPINGS}

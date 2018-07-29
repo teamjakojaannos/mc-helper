@@ -1,6 +1,0 @@
-modBaseName = ${MOD_ID}
-
-mcVersion = ${MC_VERSION}
-forgeVersion = ${FORGE_VERSION}
-mcpMappings = ${MAPPINGS}
-useDepATs = ${USE_DEP_ATS}

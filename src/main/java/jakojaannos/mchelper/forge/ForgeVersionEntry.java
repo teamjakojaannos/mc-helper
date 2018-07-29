@@ -3,13 +3,19 @@ package jakojaannos.mchelper.forge;
 import java.util.Objects;
 
 public class ForgeVersionEntry {
+    public static final String DEFAULT_VERSION = "14.23.4.2739";
+
     private final String version;
-    private final String defaultMappings;
+    private final McpMappingEntry defaultMappings;
     private final boolean latest;
     private final boolean recommended;
 
     public String getVersion() {
         return version;
+    }
+
+    public McpMappingEntry getDefaultMappings() {
+        return defaultMappings;
     }
 
     public boolean isLatest() {
@@ -20,7 +26,14 @@ public class ForgeVersionEntry {
         return recommended;
     }
 
-    public ForgeVersionEntry(String version, String defaultMappings, boolean latest, boolean recommended) {
+    public ForgeVersionEntry() {
+        this.version = DEFAULT_VERSION;
+        this.defaultMappings = new McpMappingEntry();
+        this.latest = false;
+        this.recommended = false;
+    }
+
+    public ForgeVersionEntry(String version, McpMappingEntry defaultMappings, boolean latest, boolean recommended) {
         this.version = version;
         this.defaultMappings = defaultMappings;
         this.latest = latest;
@@ -32,9 +45,9 @@ public class ForgeVersionEntry {
         if (!latest && !recommended) {
             return version;
         } else if (latest && recommended) {
-            return version + " (Latest/Recommended)" ;
+            return version + " (Latest/Recommended)";
         } else {
-            return version + " (" + (latest ? "Latest" : "Recommended" ) + ")" ;
+            return version + " (" + (latest ? "Latest" : "Recommended") + ")";
         }
     }
 

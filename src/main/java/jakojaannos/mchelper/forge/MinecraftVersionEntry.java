@@ -1,33 +1,36 @@
 package jakojaannos.mchelper.forge;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 public class MinecraftVersionEntry {
-    @NotNull
+    public static final String DEFAULT_VERSION = "1.12.2";
+
+    @NonNull
     private final String version;
-    @NotNull
-    private final String mappingsVersion;
-    @NotNull
+    @NonNull
     private Set<ForgeVersionEntry> forgeVersionEntries = new HashSet<>();
+
+    public MinecraftVersionEntry() {
+        this.version = DEFAULT_VERSION;
+    }
 
     public String getVersion() {
         return version;
     }
 
-    public MinecraftVersionEntry(@NotNull String version, @NotNull String mappingsVersion) {
+    public MinecraftVersionEntry(@NonNull String version) {
         this.version = version;
-        this.mappingsVersion = mappingsVersion;
     }
 
-    public void addForgeVersions(@NotNull ForgeVersionEntry... forgeVersionEntries) {
+    public void addForgeVersions(@NonNull ForgeVersionEntry... forgeVersionEntries) {
         this.forgeVersionEntries.addAll(Arrays.asList(forgeVersionEntries));
     }
 
-    @NotNull
+    @NonNull
     public Set<ForgeVersionEntry> getForgeVersionEntries() {
         return new HashSet<>(forgeVersionEntries);
     }

@@ -18,14 +18,13 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTemplateGroup implementation="jakojaannos.mchelper.templates.MinecraftForgeFileTemplateGroupDescriptorFactory"/>
-        <facetType implementation="jakojaannos.mchelper.facet.MinecraftForgeFacetType"/>
 
-        <moduleType id="MINECRAFTFORGE_MODULE" implementationClass="jakojaannos.mchelper.module.ForgeModuleType"/>
+        <moduleBuilder builderClass="jakojaannos.mchelper.module.ForgeModuleBuilder"/>
     </extensions>
 
-    <extensions defaultExtensionNs="org.jetbrains.plugins.gradle">
+    <!--extensions defaultExtensionNs="org.jetbrains.plugins.gradle">
         <frameworkSupport implementation="jakojaannos.mchelper.framework.GradleMinecraftForgeJavaFrameworkSupportProvider"/>
-    </extensions>
+    </extensions-->
 
     <actions>
 

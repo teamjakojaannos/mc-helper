@@ -8,12 +8,13 @@ import jakojaannos.mchelper.forge.ForgeVersionEntry;
 import jakojaannos.mchelper.forge.McpMappingEntry;
 import jakojaannos.mchelper.forge.MinecraftVersionEntry;
 import jakojaannos.mchelper.module.ForgeModuleBuilder;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
+import lombok.val;
 
 import javax.swing.*;
 
 public class ForgeWizardStep extends ModuleWizardStep {
-    private final ForgeModuleBuilder.Config config;
+    private final ForgeModuleBuilder builder;
 
     private JPanel root;
     private JComboBox<ForgeVersionEntry> forgeVersion;
@@ -22,22 +23,35 @@ public class ForgeWizardStep extends ModuleWizardStep {
     private JPanel advancedPanel;
     private JComboBox<McpMappingEntry> mcpMappings;
     private JCheckBox useDependencyATs;
+    private JComboBox mappingsMcVersion;
 
-    public ForgeWizardStep(final ForgeModuleBuilder.Config config) {
-        this.config = config;
+    public ForgeWizardStep(final ForgeModuleBuilder builder) {
+        this.builder = builder;
 
-        HideableDecorator moreSettingsDecorator = new HideableDecorator(advancedPlaceholder, "Advanced Options", false);
-        advancedPanel.setBorder(JBUI.Borders.empty(0, IdeBorderFactory.TITLED_BORDER_INDENT, 5, 0));
-        moreSettingsDecorator.setContentComponent(advancedPanel);
+        setupAdvancedPanel();
+        setupComboBoxContents();
+    }
 
-        MinecraftVersionEntry mcVersion = new MinecraftVersionEntry("1.12.2", "1.12");
+    /**
+     * Initializes version combo boxes. Gets lists of available versions and populates the combo boxes accordingly.
+     */
+    private void setupComboBoxContents() {
+        // TODO: Poll mappings from internet
+        MinecraftVersionEntry mcVersion = new MinecraftVersionEntry("1.12.2");
+        McpMappingEntry mcpMappings = new McpMappingEntry("snapshot_20171003", "1.12");
         mcVersion.addForgeVersions(
-                new ForgeVersionEntry("14.23.4.2739", "snapshot_20171003", true, false)
+                new ForgeVersionEntry("14.23.4.2739", mcpMappings, true, false)
         );
 
         minecraftVersion.addItem(mcVersion);
         mcVersion.getForgeVersionEntries().forEach(forgeVersion::addItem);
-        mcpMappings.addItem(new McpMappingEntry("snapshot_20171003", "1.12"));
+        this.mcpMappings.addItem(mcpMappings);
+    }
+
+    private void setupAdvancedPanel() {
+        HideableDecorator moreSettingsDecorator = new HideableDecorator(advancedPlaceholder, "Advanced Options", false);
+        advancedPanel.setBorder(JBUI.Borders.empty(0, IdeBorderFactory.TITLED_BORDER_INDENT, 5, 0));
+        moreSettingsDecorator.setContentComponent(advancedPanel);
     }
 
     @Override
@@ -47,37 +61,49 @@ public class ForgeWizardStep extends ModuleWizardStep {
 
     @Override
     public void updateDataModel() {
-        config.getForgeConfig().setForgeVersion(getForgeVersion());
-        config.getForgeConfig().setMinecraftVersion(getMinecraftVersion());
-        config.getForgeConfig().setMcpMappings(getMcpMappings());
-        config.getForgeConfig().setUseDependencyAts(getUseDependencyAts());
+        builder.setForgeSettings(new ForgeModuleBuilder.ForgeSettings(
+                getForgeVersion(),
+                getMinecraftVersion(),
+                getMcpMappings(),
+                getUseDependencyAts()
+        ));
     }
 
-    @NotNull
+    @NonNull
     private ForgeVersionEntry getForgeVersion() {
-        ForgeVersionEntry entry = (ForgeVersionEntry) forgeVersion.getSelectedItem();
+        val entry = (ForgeVersionEntry) forgeVersion.getSelectedItem();
         if (entry == null) {
-            throw new IllegalStateException("Selected Forge version entry cannot be null!");
+            return new ForgeVersionEntry();
         }
 
         return entry;
     }
 
-    @NotNull
+    @NonNull
     private MinecraftVersionEntry getMinecraftVersion() {
-        MinecraftVersionEntry entry = (MinecraftVersionEntry) minecraftVersion.getSelectedItem();
+        val entry = (MinecraftVersionEntry) minecraftVersion.getSelectedItem();
         if (entry == null) {
-            throw new IllegalStateException("Selected Minecraft version entry cannot be null!");
+            return new MinecraftVersionEntry();
         }
 
         return entry;
     }
 
-    @NotNull
+    @NonNull
     private McpMappingEntry getMcpMappings() {
-        McpMappingEntry entry = (McpMappingEntry) mcpMappings.getSelectedItem();
+        val entry = (McpMappingEntry) mcpMappings.getSelectedItem();
         if (entry == null) {
-            throw new IllegalStateException("Selected MCP mapping version cannot be null!");
+            return new McpMappingEntry();
+        }
+
+        return entry;
+    }
+
+    @NonNull
+    private String getMappingsMcVersion() {
+        val entry = (String) mappingsMcVersion.getSelectedItem();
+        if (entry == null) {
+            return McpMappingEntry.DEFAULT_MC_VERSION;
         }
 
         return entry;

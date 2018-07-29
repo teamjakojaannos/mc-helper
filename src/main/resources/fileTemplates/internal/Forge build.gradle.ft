@@ -1,0 +1,57 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "http://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+apply plugin: "net.minecraftforge.gradle.forge"
+
+group = mod_group
+archivesBaseName = mod_id
+
+if (System.getenv("${mod_build_number_env}")) {
+    def build_number = System.getenv("${mod_build_number_env}")
+    version = "${mc_version}-${mod_version}-${build_number}"
+} else {
+    version = "${mc_version}-${mod_version}"
+}
+
+repositories {
+    // Add repositories here
+}
+
+dependencies {
+    // Add dependencies here
+}
+
+minecraft {
+    version = "${mc_version}-${forge_version}"
+    runDir = "run"
+    mappings = project.mcp_mappings
+    //useDepATs = true // uncomment if dependency ATs are needed
+
+    // Replace version string in mod main
+    replace "__VERSION__", project.version
+    replaceIn "${MOD_MAIN_CLASS}.java"
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+
+    // copy everything else except the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
